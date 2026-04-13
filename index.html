@@ -42,6 +42,14 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">安裝環境 / 漏電保護</label>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <button onclick="setEnv('dry')" id="btn-env-dry" class="py-3 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm text-sm">一般乾燥場所</button>
+                            <button onclick="setEnv('wet')" id="btn-env-wet" class="py-3 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all text-sm">潮濕/積水地點</button>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">額定電壓</label>
@@ -94,19 +102,36 @@
                 <div class="ios-card p-10 bg-slate-900 text-white relative overflow-hidden">
                     <div class="absolute -right-20 -top-20 bg-blue-500/10 w-64 h-64 rounded-full blur-3xl"></div>
                     <h2 class="text-xs font-bold opacity-40 uppercase mb-8 tracking-[0.2em]">法規校核建議結果</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                        <!-- 斷路器規格模組 -->
                         <div class="space-y-2">
-                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">無熔絲斷路器額定</p>
+                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">保護裝置 (Breaker)</p>
                             <div class="flex items-baseline space-x-2">
-                                <span id="res-nfb" class="text-4xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
-                                <span class="text-lg md:text-xl font-bold text-blue-400/50">AT</span>
+                                <span id="res-nfb" class="text-3xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
+                                <span class="text-base font-bold text-blue-400/50">AT</span>
+                            </div>
+                            <div id="res-breaker-badge" class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold">
+                                NFB
                             </div>
                         </div>
-                        <div class="space-y-2">
-                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">建議配線規格</p>
-                            <div class="flex items-baseline space-x-2">
-                                <span id="res-wire" class="text-4xl md:text-5xl font-black text-green-400 tracking-tighter">--</span>
+
+                        <!-- 漏電保護模組 (條件顯示) -->
+                        <div id="elcb-module" class="space-y-2 opacity-20 transition-all duration-500">
+                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">漏電跳脫特性</p>
+                            <div class="flex items-baseline space-x-1">
+                                <span id="res-elcb-ma" class="text-2xl font-black text-yellow-500">--</span>
+                                <span class="text-[10px] font-bold text-yellow-500/50">mA</span>
                             </div>
+                            <p id="res-elcb-desc" class="text-[10px] text-slate-400 font-bold">非強制裝設</p>
+                        </div>
+
+                        <!-- 配線規格模組 -->
+                        <div class="space-y-2">
+                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">建議配線 (Wire)</p>
+                            <div class="flex items-baseline space-x-2">
+                                <span id="res-wire" class="text-3xl md:text-4xl lg:text-5xl font-black text-green-400 tracking-tighter whitespace-nowrap">--</span>
+                            </div>
+                            <p id="res-pole-info" class="text-[10px] text-slate-400 font-bold italic tracking-wide">--</p>
                         </div>
                     </div>
                 </div>
@@ -119,7 +144,28 @@
                     <div id="calc-steps" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs bg-slate-50 p-8 rounded-[32px] text-slate-600 leading-relaxed font-medium"></div>
                 </div>
 
-                <!-- 表格區域 -->
+                <!-- 表格區域 1: 斷路器 -->
+                <div class="ios-card overflow-hidden">
+                    <div class="p-6 bg-slate-700 text-white flex justify-between items-center">
+                        <span class="font-bold tracking-tight md:text-lg">斷路器市場規格表</span>
+                        <span id="res-breaker-title-pole" class="text-[10px] md:text-xs bg-slate-600 px-3 py-1 rounded-full text-slate-300">2P 配置</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-400 font-black text-xs md:text-sm uppercase">
+                                <tr>
+                                    <th class="px-8 py-5 md:py-6 border-b">規格類型</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">跳脫額定 (AT)</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">框架容量 (AF)</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">校核狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breaker-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 表格區域 2: 導線 -->
                 <div class="ios-card overflow-hidden">
                     <div class="p-6 bg-slate-800 text-white flex justify-between items-center">
                         <span class="font-bold tracking-tight md:text-lg">市場規格安全校核表</span>
@@ -155,11 +201,26 @@
 
     <script>
         let currentPhase = 1;
+        let currentEnv = 'dry';
+
+        function setEnv(env) {
+            currentEnv = env;
+            const bDry = document.getElementById('btn-env-dry');
+            const bWet = document.getElementById('btn-env-wet');
+            if (env === 'dry') {
+                bDry.className = "py-3 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm text-sm";
+                bWet.className = "py-3 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all text-sm";
+            } else {
+                bWet.className = "py-3 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm text-sm";
+                bDry.className = "py-3 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all text-sm";
+            }
+            calculate();
+        }
 
         const nfbMarketSpecs = [
-            { at: 15 }, { at: 20 }, { at: 30 }, { at: 40 }, { at: 50 }, 
-            { at: 60 }, { at: 75 }, { at: 100 }, { at: 125 }, { at: 150 }, 
-            { at: 175 }, { at: 200 }, { at: 225 }, { at: 250 }, { at: 300 }, { at: 400 }
+            { at: 15, af: 50 }, { at: 20, af: 50 }, { at: 30, af: 50 }, { at: 40, af: 50 }, { at: 50, af: 50 }, 
+            { at: 60, af: 100 }, { at: 75, af: 100 }, { at: 100, af: 100 }, { at: 125, af: 225 }, { at: 150, af: 225 }, 
+            { at: 175, af: 225 }, { at: 200, af: 225 }, { at: 225, af: 225 }, { at: 250, af: 400 }, { at: 300, af: 400 }, { at: 400, af: 400 }
         ];
 
         const wireSpecs = [
@@ -226,9 +287,64 @@
 
             const recNFB = nfbMarketSpecs.find(s => s.at >= I_design) || nfbMarketSpecs[nfbMarketSpecs.length - 1];
             const recWire = wireSpecs.find(w => w.amp >= recNFB.at);
+            const poleCount = currentPhase === 1 ? '2P' : '3P';
 
+            // 更新 UI 數值
             document.getElementById('res-nfb').innerText = `${recNFB.at}`;
-            document.getElementById('res-wire').innerText = recWire ? recWire.name : "超出規格範圍";
+            
+            if (recWire) {
+                const nameParts = recWire.name.split(' ');
+                // 處理如 "125mm² (絞線)" 的顯示
+                if (nameParts.length > 1) {
+                    document.getElementById('res-wire').innerHTML = `${nameParts[0]}<span class="text-lg md:text-2xl opacity-50 ml-2 font-bold">${nameParts[1]}</span>`;
+                } else {
+                    document.getElementById('res-wire').innerText = recWire.name;
+                }
+            } else {
+                document.getElementById('res-wire').innerText = "超出規格範圍";
+            }
+            
+            document.getElementById('res-pole-info').innerText = `${poleCount} 配置 (L1/L2${currentPhase === 3 ? '/L3' : ''})`;
+
+            // 處理 ELCB 邏輯
+            const elcbModule = document.getElementById('elcb-module');
+            const breakerBadge = document.getElementById('res-breaker-badge');
+            
+            if (currentEnv === 'wet') {
+                elcbModule.classList.remove('opacity-20');
+                elcbModule.classList.add('opacity-100');
+                document.getElementById('res-elcb-ma').innerText = '30';
+                document.getElementById('res-elcb-desc').innerHTML = '<i class="fas fa-exclamation-triangle mr-1"></i> 強制漏電保護';
+                breakerBadge.innerText = 'ELCB / NV';
+                breakerBadge.className = "inline-flex items-center px-2 py-0.5 rounded-md bg-yellow-500/20 text-yellow-400 text-[10px] font-bold";
+            } else {
+                elcbModule.classList.add('opacity-20');
+                elcbModule.classList.remove('opacity-100');
+                document.getElementById('res-elcb-ma').innerText = '--';
+                document.getElementById('res-elcb-desc').innerText = '非強制裝設';
+                breakerBadge.innerText = 'NFB';
+                breakerBadge.className = "inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold";
+            }
+
+            // 更新斷路器表格
+            document.getElementById('res-breaker-title-pole').innerText = `${poleCount} 配置`;
+            const breakerBody = document.getElementById('breaker-table-body');
+            breakerBody.innerHTML = "";
+            nfbMarketSpecs.forEach(spec => {
+                const isSelected = spec.at === recNFB.at;
+                const row = document.createElement('tr');
+                if (isSelected) row.className = "recommend-row";
+                const typeName = currentEnv === 'wet' ? 'ELCB / NV' : 'NFB';
+                row.innerHTML = `
+                    <td class="px-8 py-5 border-b font-bold text-slate-700">${poleCount} ${typeName}</td>
+                    <td class="px-8 py-5 border-b font-mono font-bold text-blue-600">${spec.at} A</td>
+                    <td class="px-8 py-5 border-b font-mono text-slate-400">${spec.af} AF</td>
+                    <td class="px-8 py-5 border-b">
+                        ${isSelected ? '<span class="bg-blue-500 text-white text-[10px] px-3 py-1 rounded-full font-bold">選配建議</span>' : (spec.at < I_design ? '<span class="text-red-400 text-[10px]">額定過低</span>' : '<span class="text-slate-300 text-[10px]">--</span>')}
+                    </td>
+                `;
+                breakerBody.appendChild(row);
+            });
 
             const formulaText = currentPhase === 1 
                 ? `I = P / (V × PF) = ${P} / (${V} × ${PF})`
