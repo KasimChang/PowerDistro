@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>配電助手 - 專業電工配置工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="pb-16 text-slate-900">
+
+    <!-- Header: 手機版精簡寬幅，電腦版維持層次 -->
+    <header class="bg-slate-900 text-white pt-6 pb-4 md:pt-10 md:pb-8 px-8 rounded-b-[30px] md:rounded-b-[40px] shadow-2xl sticky top-0 z-50">
+        <div class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tighter">配電助手 <span class="text-blue-400">Pro</span></h1>
+                <p class="hidden md:block text-slate-400 text-sm mt-1 font-medium italic opacity-80">專業電工配置校核系統</p>
+            </div>
+            <div class="bg-blue-600 p-2 md:p-3 rounded-2xl shadow-lg shadow-blue-500/20">
+                <i class="fas fa-bolt text-white text-base md:text-xl"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content: 使用更寬的容器減少兩側白邊 -->
+    <main class="max-w-[1440px] mx-auto px-8 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <!-- Left Column: Inputs (電腦版縮窄比例) -->
+        <div class="lg:col-span-4 space-y-8">
+            <section class="ios-card p-8 border border-white sticky top-32">
+                <h2 class="text-xl font-bold mb-6 flex items-center text-slate-800">
+                    <i class="fas fa-sliders-h mr-3 text-blue-500"></i> 配置參數
+                </h2>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">供電相線</label>
+                        <div class="grid grid-cols-2 gap-4 mt-2">
+                            <button onclick="setPhase(1)" id="btn-p1" class="py-4 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm">單相 (1Φ)</button>
+                            <button onclick="setPhase(3)" id="btn-p3" class="py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all">三相 (3Φ)</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">額定電壓</label>
+                            <select id="voltage" onchange="calculate()" class="w-full mt-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 focus:ring-4 focus:ring-blue-100 outline-none font-bold text-slate-700">
+                                <option value="110">110V</option>
+                                <option value="220" selected>220V</option>
+                                <option value="380">380V</option>
+                                <option value="440">440V</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">功率單位</label>
+                            <select id="power-unit" onchange="calculate()" class="w-full mt-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 outline-none font-bold text-blue-600">
+                                <option value="W">W</option>
+                                <option value="kW">kW</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">設備額定功率</label>
+                        <input type="number" id="power" oninput="calculate()" placeholder="例如: 5.5" class="w-full mt-2 p-5 bg-slate-50 rounded-2xl border border-slate-100 outline-none font-black text-3xl text-slate-800">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">功率因素 (PF)</label>
+                        <div class="flex mt-2 space-x-2">
+                            <select id="pf-preset" onchange="updatePF(this.value)" class="flex-1 p-4 bg-slate-50 rounded-2xl border border-slate-100 outline-none text-sm font-medium">
+                                <option value="0.8">0.8 (冷氣/馬達)</option>
+                                <option value="1.0">1.0 (純電熱)</option>
+                                <option value="0.9">0.9 (電子燈具)</option>
+                                <option value="custom">自定義</option>
+                            </select>
+                            <input type="number" id="pf-value" oninput="calculate()" value="0.8" step="0.05" min="0.1" max="1.0" class="w-24 p-4 bg-slate-100 rounded-2xl border border-slate-100 text-center font-black">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column: Results (電腦版加寬顯示) -->
+        <div id="results-container" class="lg:col-span-8 space-y-8">
+            <div id="empty-state" class="ios-card p-20 text-center text-slate-300">
+                <i class="fas fa-bolt text-7xl mb-6 opacity-10"></i>
+                <p class="font-bold text-xl">請於左側輸入數值開始即時計算</p>
+            </div>
+
+            <div id="results-view" class="hidden space-y-8">
+                <!-- Summary Card: 電腦版橫向排列 -->
+                <div class="ios-card p-10 bg-slate-900 text-white relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 bg-blue-500/10 w-64 h-64 rounded-full blur-3xl"></div>
+                    <h2 class="text-xs font-bold opacity-40 uppercase mb-8 tracking-[0.2em]">法規校核建議結果</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                        <div class="space-y-2">
+                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">無熔絲斷路器額定</p>
+                            <div class="flex items-baseline space-x-2">
+                                <span id="res-nfb" class="text-4xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
+                                <span class="text-lg md:text-xl font-bold text-blue-400/50">AT</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">建議配線規格</p>
+                            <div class="flex items-baseline space-x-2">
+                                <span id="res-wire" class="text-4xl md:text-5xl font-black text-green-400 tracking-tighter">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 計算明細 -->
+                <div class="ios-card p-8 border border-slate-100">
+                    <h2 class="text-sm font-black mb-6 text-slate-800 uppercase tracking-[0.15em] flex items-center">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full mr-3"></span> 計算過程明細
+                    </h2>
+                    <div id="calc-steps" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs bg-slate-50 p-8 rounded-[32px] text-slate-600 leading-relaxed font-medium"></div>
+                </div>
+
+                <!-- 表格區域 -->
+                <div class="ios-card overflow-hidden">
+                    <div class="p-6 bg-slate-800 text-white flex justify-between items-center">
+                        <span class="font-bold tracking-tight md:text-lg">市場規格安全校核表</span>
+                        <span class="text-[10px] md:text-xs bg-slate-700 px-3 py-1 rounded-full text-slate-300">PVC 導線管配線基準</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead class="bg-slate-50 text-slate-400 font-black text-xs md:text-sm uppercase">
+                                <tr>
+                                    <th class="px-8 py-5 md:py-6 border-b">導線規格名稱</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">安培容量 (A)</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">法規依據</th>
+                                    <th class="px-8 py-5 md:py-6 border-b">校核狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wire-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 法規清單 -->
+                <div class="p-8 rounded-[40px] border-2 border-dashed border-slate-200 bg-white/50">
+                    <h3 class="text-xs font-black text-slate-400 mb-6 uppercase tracking-widest flex items-center">
+                        <i class="fas fa-balance-scale mr-3 text-slate-300"></i> 《用戶用電設備裝置規則》引用清單
+                    </h3>
+                    <ul id="law-list" class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 text-[11px] md:text-xs text-slate-500 list-none">
+                        <!-- 動態填充 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentPhase = 1;
+
+        const nfbMarketSpecs = [
+            { at: 15 }, { at: 20 }, { at: 30 }, { at: 40 }, { at: 50 }, 
+            { at: 60 }, { at: 75 }, { at: 100 }, { at: 125 }, { at: 150 }, 
+            { at: 175 }, { at: 200 }, { at: 225 }, { at: 250 }, { at: 300 }, { at: 400 }
+        ];
+
+        const wireSpecs = [
+            { name: "1.6mm (白扁)", amp: 12, ref: "第 16 條 表 16-7" },
+            { name: "2.0mm (白扁)", amp: 15, ref: "第 16 條 表 16-7" },
+            { name: "2.0mm (單心)", amp: 19, ref: "第 16 條 表 16-3" },
+            { name: "3.5mm² (絞線)", amp: 19, ref: "第 16 條 表 16-3" },
+            { name: "5.5mm² (絞線)", amp: 25, ref: "第 16 條 表 16-3" },
+            { name: "8.0mm² (絞線)", amp: 33, ref: "第 16 條 表 16-3" },
+            { name: "14mm² (絞線)", amp: 50, ref: "第 16 條 表 16-3" },
+            { name: "22mm² (絞線)", amp: 60, ref: "第 16 條 表 16-3" },
+            { name: "30mm² (絞線)", amp: 75, ref: "第 16 條 表 16-3" },
+            { name: "38mm² (絞線)", amp: 85, ref: "第 16 條 表 16-3" },
+            { name: "50mm² (絞線)", amp: 100, ref: "第 16 條 表 16-3" },
+            { name: "60mm² (絞線)", amp: 115, ref: "第 16 條 表 16-3" },
+            { name: "80mm² (絞線)", amp: 140, ref: "第 16 條 表 16-3" },
+            { name: "100mm² (絞線)", amp: 160, ref: "第 16 條 表 16-3" },
+            { name: "125mm² (絞線)", amp: 190, ref: "第 16 條 表 16-3" },
+            { name: "150mm² (絞線)", amp: 220, ref: "第 16 條 表 16-3" },
+            { name: "200mm² (絞線)", amp: 260, ref: "第 16 條 表 16-3" },
+            { name: "250mm² (絞線)", amp: 300, ref: "第 16 條 表 16-3" }
+        ];
+
+        function setPhase(p) {
+            currentPhase = p;
+            const b1 = document.getElementById('btn-p1');
+            const b3 = document.getElementById('btn-p3');
+            if (p === 1) {
+                b1.className = "py-4 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm";
+                b3.className = "py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all";
+            } else {
+                b3.className = "py-4 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm";
+                b1.className = "py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all";
+            }
+            calculate();
+        }
+
+        function updatePF(val) {
+            if (val !== 'custom') document.getElementById('pf-value').value = val;
+            calculate();
+        }
+
+        function calculate() {
+            let P = parseFloat(document.getElementById('power').value);
+            const unit = document.getElementById('power-unit').value;
+            const V = parseFloat(document.getElementById('voltage').value);
+            const PF = parseFloat(document.getElementById('pf-value').value);
+            const empty = document.getElementById('empty-state');
+            const view = document.getElementById('results-view');
+
+            if (!P || P <= 0) {
+                empty.classList.remove('hidden');
+                view.classList.add('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            view.classList.remove('hidden');
+
+            if (unit === "kW") P *= 1000;
+
+            const I_load = currentPhase === 1 ? P / (V * PF) : P / (Math.sqrt(3) * V * PF);
+            const I_design = I_load * 1.25;
+
+            const recNFB = nfbMarketSpecs.find(s => s.at >= I_design) || nfbMarketSpecs[nfbMarketSpecs.length - 1];
+            const recWire = wireSpecs.find(w => w.amp >= recNFB.at);
+
+            document.getElementById('res-nfb').innerText = `${recNFB.at}`;
+            document.getElementById('res-wire').innerText = recWire ? recWire.name : "超出規格範圍";
+
+            const formulaText = currentPhase === 1 
+                ? `I = P / (V × PF) = ${P} / (${V} × ${PF})`
+                : `I = P / (√3 × V × PF) = ${P} / (1.732 × ${V} × ${PF})`;
+
+            document.getElementById('calc-steps').innerHTML = `
+                <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover hover:shadow-md">
+                    <p class="font-bold text-slate-800 text-sm md:text-base mb-2">1. 基本負載電流計算</p>
+                    <p class="font-mono">${formulaText}</p>
+                    <p class="mt-1 text-blue-600 font-bold text-lg">= ${I_load.toFixed(2)} A</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover hover:shadow-md">
+                    <p class="font-bold text-slate-800 text-sm md:text-base mb-2">2. 持續負載修正 (第 59 條)</p>
+                    <p>持續負載應以 1.25 倍計算：</p>
+                    <p class="mt-1 text-blue-600 font-bold text-lg">${I_load.toFixed(2)}A × 1.25 = ${I_design.toFixed(2)} A</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover hover:shadow-md">
+                    <p class="font-bold text-slate-800 text-sm md:text-base mb-2">3. NFB 規格選配 (第 151 條)</p>
+                    <p>額定應大於持續負載校核值。</p>
+                    <p class="mt-1 text-blue-600 font-bold text-lg">選用：${recNFB.at} A</p>
+                </div>
+                <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover hover:shadow-md">
+                    <p class="font-bold text-slate-800 text-sm md:text-base mb-2">4. 導線容量校核 (第 158 條)</p>
+                    <p>導線安培容量需 &ge; NFB 額定值。</p>
+                    <p class="mt-1 text-green-600 font-bold text-lg">${recWire ? `選用：${recWire.name}` : '警告：超出規格'}</p>
+                </div>
+            `;
+
+            const wireBody = document.getElementById('wire-table-body');
+            wireBody.innerHTML = "";
+            wireSpecs.forEach(spec => {
+                const isSelected = recWire && spec.name === recWire.name;
+                const row = document.createElement('tr');
+                if (isSelected) row.className = "recommend-row";
+                row.innerHTML = `
+                    <td class="px-8 py-5 border-b font-bold text-slate-700">${spec.name}</td>
+                    <td class="px-8 py-5 border-b font-mono font-bold text-slate-900">${spec.amp} A</td>
+                    <td class="px-8 py-5 border-b text-slate-400 font-medium text-xs">${spec.ref}</td>
+                    <td class="px-8 py-5 border-b">
+                        ${isSelected ? '<span class="bg-green-500 text-white text-[10px] px-3 py-1 rounded-full font-bold">符合安全校核</span>' : '<span class="text-slate-300 text-[10px]">--</span>'}
+                    </td>
+                `;
+                wireBody.appendChild(row);
+            });
+
+            document.getElementById('law-list').innerHTML = `
+                <li class="flex items-start bg-slate-50 p-4 rounded-2xl"><i class="fas fa-info-circle mt-1 mr-3 text-blue-400"></i><span><strong>《第 16 條》</strong>：絕緣電線之安培容量應依其裝設環境，參考表 16-1 至表 16-7 規定。</span></li>
+                <li class="flex items-start bg-slate-50 p-4 rounded-2xl"><i class="fas fa-info-circle mt-1 mr-3 text-blue-400"></i><span><strong>《第 59 條》</strong>：分路負載應以 125% 計算持續負載電流，以防止保護裝置因長時溫升誤動作。</span></li>
+                <li class="flex items-start bg-slate-50 p-4 rounded-2xl"><i class="fas fa-info-circle mt-1 mr-3 text-blue-400"></i><span><strong>《第 151 條》</strong>：過電流保護器額定值應足夠承載負載電流，且不得大於導線安培容量。</span></li>
+                <li class="flex items-start bg-slate-50 p-4 rounded-2xl"><i class="fas fa-info-circle mt-1 mr-3 text-blue-400"></i><span><strong>《第 158 條》</strong>：導線安培容量需不小於其所裝設過電流保護器之額定值。</span></li>
+                <li class="flex items-start bg-slate-50 p-4 rounded-2xl"><i class="fas fa-info-circle mt-1 mr-3 text-blue-400"></i><span><strong>《第 54 條》</strong>：針對可能積水或潮濕場所（如浴室、露台），強制裝設漏電斷路器。</span></li>
+            `;
+        }
+    </script>
+</body>
+</html>
