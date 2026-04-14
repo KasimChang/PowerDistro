@@ -53,3 +53,26 @@ input:focus, select:focus {
     background: #d1d5db;
     border-radius: 10px;
 }
+
+/* Accordion Styles */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 2000px;
+    opacity: 1;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+.accordion-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
