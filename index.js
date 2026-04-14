@@ -122,7 +122,7 @@ function calculateLoad(power, unit, voltage, pf, phase) {
     let P = parseFloat(power);
     if (!P || P <= 0) return null;
     if (unit === "kW") P *= 1000;
-    
+
     // 負載電流
     const I_load = phase === 1 ? P / (voltage * pf) : P / (Math.sqrt(3) * voltage * pf);
     // 設計電流 (依規採取 1.25 倍安全係數)
@@ -130,12 +130,12 @@ function calculateLoad(power, unit, voltage, pf, phase) {
 
     // 校核路徑 1: 根據設計電流選取滿足負載之最小導線
     const recWire = wireSpecs.find(w => w.amp >= I_design);
-    
+
     // 校核路徑 2: 根據設計電流選取滿足負載之商規 NFB (AT)
     const recNFB = nfbMarketSpecs.find(s => s.at >= I_design) || nfbMarketSpecs[nfbMarketSpecs.length - 1];
 
     // 法規判定：確保 800A 以下符合第 151 條「次高額定原則」
-    
+
     return {
         I_load, I_design, recNFB, recWire,
         poleCount: phase === 1 ? '2P' : '3P',
@@ -145,35 +145,35 @@ function calculateLoad(power, unit, voltage, pf, phase) {
 
 // --- UI 渲染與事件 ---
 
-window.setPhase = function(p) {
+window.setPhase = function (p) {
     currentPhase = p;
     document.getElementById('btn-p1').className = "py-4 rounded-2xl border-2 transition-all " + (p === 1 ? "border-blue-600 bg-blue-50 text-blue-700 font-bold shadow-sm" : "border-slate-100 bg-slate-50 text-slate-400 font-bold");
     document.getElementById('btn-p3').className = "py-4 rounded-2xl border-2 transition-all " + (p === 3 ? "border-blue-600 bg-blue-50 text-blue-700 font-bold shadow-sm" : "border-slate-100 bg-slate-50 text-slate-400 font-bold");
     window.calculate();
 };
 
-window.setEnv = function(env) {
+window.setEnv = function (env) {
     currentEnv = env;
     document.getElementById('btn-env-dry').className = "py-3 rounded-2xl border-2 transition-all text-sm " + (env === 'dry' ? "border-blue-600 bg-blue-50 text-blue-700 font-bold shadow-sm" : "border-slate-100 bg-slate-50 text-slate-400 font-bold");
     document.getElementById('btn-env-wet').className = "py-3 rounded-2xl border-2 transition-all text-sm " + (env === 'wet' ? "border-blue-600 bg-blue-50 text-blue-700 font-bold shadow-sm" : "border-slate-100 bg-slate-50 text-slate-400 font-bold");
     window.calculate();
 };
 
-window.updatePF = function(val) {
+window.updatePF = function (val) {
     if (val !== 'custom') document.getElementById('pf-value').value = val;
     window.calculate();
 };
 
-window.toggleAccordion = function(btn) {
+window.toggleAccordion = function (btn) {
     btn.parentElement.classList.toggle('active');
 };
 
-window.calculate = function() {
+window.calculate = function () {
     const power = document.getElementById('power').value;
     const unit = document.getElementById('power-unit').value;
     const voltage = document.getElementById('voltage').value;
     const pf = document.getElementById('pf-value').value;
-    
+
     const result = calculateLoad(power, unit, voltage, pf, currentPhase);
     const empty = document.getElementById('empty-state');
     const view = document.getElementById('results-view');
@@ -213,7 +213,7 @@ window.calculate = function() {
 function renderTables(res) {
     const typeNm = currentEnv === 'wet' ? 'ELCB / NV' : 'NFB';
     document.getElementById('res-breaker-title-pole').innerText = `${res.poleCount} 配置`;
-    
+
     document.getElementById('breaker-table-body').innerHTML = nfbMarketSpecs.map(s => {
         const isSel = s.at === res.recNFB.at;
         return `<tr class="${isSel ? 'recommend-row' : ''}">
@@ -237,22 +237,22 @@ function renderTables(res) {
 
 function renderSteps(res) {
     document.getElementById('calc-steps').innerHTML = `
-        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover">
-            <p class="font-bold text-slate-800 text-[10px] md:text-xs mb-2 uppercase opacity-40 tracking-wider">1. 負載電流</p>
-            <p class="font-mono text-[10px] md:text-xs text-slate-400">${res.formula}</p>
-            <p class="mt-1 text-blue-600 font-bold text-lg md:text-xl">= ${res.I_load.toFixed(2)} A</p>
+        <div class="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm transition-hover">
+            <p class="font-bold text-slate-600 text-[10px] md:text-xs mb-2 uppercase tracking-wider">1. 負載電流</p>
+            <p class="font-mono text-[10px] md:text-xs text-slate-500">${res.formula}</p>
+            <p class="mt-1 text-blue-700 font-bold text-lg md:text-xl">= ${res.I_load.toFixed(2)} A</p>
         </div>
-        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover">
-            <p class="font-bold text-slate-800 text-[10px] md:text-xs mb-2 uppercase opacity-40 tracking-wider">2. 設計電流 (1.25x)</p>
-            <p class="mt-1 text-blue-600 font-bold text-lg md:text-xl">${res.I_design.toFixed(2)} A</p>
+        <div class="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm transition-hover">
+            <p class="font-bold text-slate-600 text-[10px] md:text-xs mb-2 uppercase tracking-wider">2. 設計電流 (1.25x)</p>
+            <p class="mt-1 text-blue-700 font-bold text-lg md:text-xl">${res.I_design.toFixed(2)} A</p>
         </div>
-        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover">
-            <p class="font-bold text-slate-800 text-[10px] md:text-xs mb-2 uppercase opacity-40 tracking-wider">3. 保護選配</p>
-            <p class="mt-1 text-blue-600 font-bold text-lg md:text-xl">NFB ${res.recNFB.at} A</p>
+        <div class="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm transition-hover">
+            <p class="font-bold text-slate-600 text-[10px] md:text-xs mb-2 uppercase tracking-wider">3. 保護選配</p>
+            <p class="mt-1 text-blue-700 font-bold text-lg md:text-xl">NFB ${res.recNFB.at} A</p>
         </div>
-        <div class="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm transition-hover">
-            <p class="font-bold text-slate-800 text-[10px] md:text-xs mb-2 uppercase opacity-40 tracking-wider">4. 導線校核</p>
-            <p class="mt-1 text-green-600 font-bold text-lg md:text-xl">${res.recWire ? res.recWire.name : '規格超出'}</p>
+        <div class="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm transition-hover">
+            <p class="font-bold text-slate-600 text-[10px] md:text-xs mb-2 uppercase tracking-wider">4. 導線校核</p>
+            <p class="mt-1 text-green-700 font-bold text-lg md:text-xl">${res.recWire ? res.recWire.name : '規格超出'}</p>
         </div>
     `;
 }
@@ -275,43 +275,51 @@ function initSOP() {
                 <div class="accordion-content px-4 md:px-8 pb-4">
                     <div class="space-y-4 pb-4">
                         ${p.items.map(item => `
-                            <div class="bg-slate-50/50 p-4 md:p-6 rounded-[20px] md:rounded-[24px] border border-slate-100 shadow-inner">
-                                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                                    <h3 class="font-black text-slate-800 text-xs md:text-sm">${item.id}: ${item.name}</h3>
-                                    <span class="text-[9px] md:text-[11px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md uppercase tracking-tighter shrink-0">工具: ${item.tools}</span>
+                            <div class="py-6 md:p-6 md:bg-slate-50/50 md:rounded-[24px] border-b border-slate-100 last:border-0 md:border md:shadow-inner md:mb-6">
+                                <div class="flex flex-wrap items-center justify-between gap-2 mb-4 px-2 md:px-0">
+                                    <h3 class="font-black text-slate-800 text-sm md:text-base">${item.id}: ${item.name}</h3>
+                                    <span class="text-[10px] md:text-[11px] font-bold text-blue-500 bg-blue-50 px-2 py-0.5 md:py-1 rounded-md uppercase tracking-tighter shrink-0">工具: ${item.tools}</span>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs md:text-sm">
-                                    <div class="bg-white p-3 md:p-4 rounded-xl border border-slate-100 shadow-sm">
-                                        <p class="text-[9px] md:text-[11px] font-bold text-slate-300 uppercase mb-2">作業流程</p>
-                                        <p class="text-slate-600 leading-relaxed font-medium">${item.process}</p>
+                                    <div class="p-2 md:p-4 md:bg-white md:rounded-xl md:border md:border-slate-200 md:shadow-sm border-l-4 border-slate-400 md:border-l-0">
+                                        <p class="text-[10px] md:text-[11px] font-black text-slate-600 uppercase mb-2">作業流程</p>
+                                        <p class="text-slate-900 leading-relaxed font-bold">${item.process}</p>
                                     </div>
-                                    <div class="space-y-2">
+                                    <div class="space-y-4 md:space-y-2">
                                         ${item.standards || item.indicators || item.details || item.table || item.standards_list ? `
-                                            <div class="bg-white p-3 md:p-4 rounded-xl border border-blue-100/50 shadow-sm">
-                                                <p class="text-[9px] md:text-[11px] font-bold text-blue-300 uppercase mb-2">判定指標與法規</p>
-                                                <div class="space-y-2">
+                                            <div class="p-2 md:p-4 md:bg-white md:rounded-xl md:border md:border-blue-200 md:shadow-sm">
+                                                <p class="text-[10px] md:text-[11px] font-black text-blue-700 uppercase mb-3 px-1">判定指標與法規</p>
+                                                <div class="space-y-3 md:space-y-2">
                                                     ${item.standards ? `
-                                                        <table class="w-full bg-white rounded-lg overflow-hidden border border-slate-100 font-medium">
-                                                            ${item.standards.map(s => `<tr><td class="px-3 py-1.5 border-b text-slate-400">${s.spec}</td><td class="px-3 py-1.5 border-b font-black text-slate-800">${s.val} N·m</td><td class="px-3 py-1.5 border-b text-right text-[9px] text-blue-400">${s.ref || ''}</td></tr>`).join('')}
+                                                        <table class="w-full bg-white rounded-lg overflow-hidden border border-slate-200 font-bold">
+                                                            ${item.standards.map(s => `<tr><td class="px-3 py-2 border-b text-slate-600">${s.spec}</td><td class="px-3 py-2 border-b font-black text-slate-900">${s.val} N·m</td><td class="px-3 py-2 border-b text-right"><span class="text-[9px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black uppercase shadow-sm">${s.ref || ''}</span></td></tr>`).join('')}
                                                         </table>
                                                     ` : ''}
                                                     ${item.indicators ? `
-                                                        <div class="grid grid-cols-2 gap-2">
-                                                            ${item.indicators.map(ind => `<div class="p-2 rounded-lg bg-slate-50 border border-slate-100"><p class="text-[9px] text-slate-300 font-bold">${ind.label} <span class="text-blue-300 ml-1">${ind.ref || ''}</span></p><p class="font-black text-${ind.color}-600">${ind.value}</p></div>`).join('')}
+                                                        <div class="grid grid-cols-2 gap-3 md:gap-2">
+                                                            ${item.indicators.map(ind => `<div class="p-3 rounded-xl bg-slate-50 border border-slate-200"><p class="text-[10px] text-slate-500 font-black mb-1">${ind.label}</p><div class="flex items-center justify-between"><p class="font-black text-slate-900 text-sm md:text-base">${ind.value}</p><span class="text-[9px] bg-blue-700 text-white px-1.5 py-0.5 rounded-sm font-black shadow-sm">${ind.ref || ''}</span></div></div>`).join('')}
                                                         </div>
                                                     ` : ''}
                                                     ${item.standards_list ? `
-                                                        <ul class="text-slate-500 space-y-1.5 pl-1 font-medium italic">
+                                                        <ul class="text-slate-700 space-y-2 pl-2 font-bold italic border-l-2 border-blue-500">
                                                             ${item.standards_list.map(l => `<li>• ${l}</li>`).join('')}
                                                         </ul>
                                                     ` : ''}
                                                     ${item.table ? `
-                                                        <table class="w-full bg-white rounded-lg border border-slate-100 font-medium">
-                                                            ${item.table.map(d => `<tr><td class="px-3 py-1.5 border-b text-slate-400">${d.range}</td><td class="px-3 py-1.5 border-b text-right font-black text-slate-800">${d.desc}</td></tr>`).join('')}
+                                                        <table class="w-full bg-white rounded-lg border border-slate-200 font-bold text-slate-700">
+                                                            ${item.table.map(d => `<tr><td class="px-3 py-2 border-b text-slate-600">${d.range}</td><td class="px-3 py-2 border-b text-right font-black text-slate-900">${d.desc}</td></tr>`).join('')}
                                                         </table>
                                                     ` : ''}
                                                     ${item.details ? `
-                                                        ${item.details.map(d => `<div class="flex justify-between bg-white p-2 rounded-lg border border-slate-100"><span class="text-slate-400 underline decoration-slate-200">${d.label} <small class="text-blue-300 no-underline">${d.ref || ''}</small></span><span class="font-black text-slate-800">${d.value}</span></div>`).join('')}
+                                                        ${item.details.map(d => `
+                                                            <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                                                <span class="text-slate-800 font-black text-[11px] md:text-xs">${d.label}</span>
+                                                                <div class="flex items-center gap-3">
+                                                                    <span class="font-black text-slate-900 text-sm">${d.value}</span>
+                                                                    <span class="${d.ref === '經驗標準' ? 'bg-amber-600 text-white' : 'bg-blue-700 text-white'} text-[9px] px-2 py-1 rounded-sm font-black tracking-tighter whitespace-nowrap">${d.ref || ''}</span>
+                                                                </div>
+                                                            </div>
+                                                        `).join('')}
                                                     ` : ''}
                                                 </div>
                                             </div>
