@@ -39,10 +39,10 @@
 
                 <div class="space-y-6">
                     <div>
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">供電相線</label>
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">供電相線</label>
                         <div class="grid grid-cols-2 gap-4 mt-2">
                             <button onclick="setPhase(1)" id="btn-p1"
-                                class="py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all">單相
+                                class="py-4 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-600 font-bold transition-all">單相
                                 (1Φ)</button>
                             <button onclick="setPhase(3)" id="btn-p3"
                                 class="py-4 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm">三相
@@ -51,19 +51,19 @@
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">安裝環境 /
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">安裝環境 /
                             漏電保護</label>
                         <div class="grid grid-cols-2 gap-4 mt-2">
                             <button onclick="setEnv('dry')" id="btn-env-dry"
                                 class="py-3 rounded-2xl border-2 border-blue-600 bg-blue-50 text-blue-700 font-bold transition-all shadow-sm text-sm">一般乾燥場所</button>
                             <button onclick="setEnv('wet')" id="btn-env-wet"
-                                class="py-3 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-400 font-bold transition-all text-sm">潮濕/積水地點</button>
+                                class="py-3 rounded-2xl border-2 border-slate-100 bg-slate-50 text-slate-600 font-bold transition-all text-sm">潮濕/積水地點</button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">額定電壓</label>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">額定電壓</label>
                             <select id="voltage" onchange="calculate()"
                                 class="w-full mt-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 focus:ring-4 focus:ring-blue-100 outline-none font-bold text-slate-700">
                                 <option value="110">110V</option>
@@ -73,7 +73,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">功率單位</label>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">功率單位</label>
                             <select id="power-unit" onchange="calculate()"
                                 class="w-full mt-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 outline-none font-bold text-blue-600">
                                 <option value="W">W</option>
@@ -83,13 +83,13 @@
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">設備額定功率</label>
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">設備額定功率</label>
                         <input type="number" id="power" oninput="calculate()" placeholder="例如: 5.5"
                             class="w-full mt-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 outline-none font-bold text-lg md:text-xl text-slate-800">
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">功率因素 (PF)</label>
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-widest ml-1">功率因素 (PF)</label>
                         <div class="flex mt-2 space-x-2">
                             <select id="pf-preset" onchange="updatePF(this.value)"
                                 class="flex-1 p-4 bg-slate-50 rounded-2xl border border-slate-100 outline-none text-sm font-medium">
@@ -121,7 +121,7 @@
                     <h2 class="text-xs font-bold opacity-40 uppercase mb-8 tracking-[0.2em]">法規校核建議結果</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
                         <div class="space-y-2">
-                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">保護裝置 (Breaker)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">保護裝置 (NFB)</p>
                             <div class="flex items-baseline space-x-2">
                                 <span id="res-nfb" class="text-3xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
                                 <span class="text-base font-bold text-blue-400/50">AT</span>
@@ -129,7 +129,7 @@
                             <div id="res-breaker-badge" class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold">NFB</div>
                         </div>
                         <div id="elcb-module" class="space-y-2 opacity-20 transition-all duration-500">
-                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">漏電跳脫特性</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">漏電跳脫</p>
                             <div class="flex items-baseline space-x-1">
                                 <span id="res-elcb-ma" class="text-3xl md:text-5xl font-black text-yellow-500 tracking-tighter">--</span>
                                 <span class="text-[10px] font-bold text-yellow-500/50">mA</span>
@@ -137,11 +137,11 @@
                             <p id="res-elcb-desc" class="text-[10px] text-slate-400 font-bold">非強制裝設</p>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-xs opacity-50 uppercase font-bold tracking-wider">建議配線 (Wire)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">建議配線 (Wire)</p>
                             <div class="flex items-baseline space-x-2">
                                 <span id="res-wire" class="text-3xl md:text-4xl lg:text-5xl font-black text-green-400 tracking-tighter whitespace-nowrap">--</span>
                             </div>
-                            <p id="res-pole-info" class="text-[10px] text-slate-400 font-bold italic tracking-wide">--</p>
+                            <p id="res-pole-info" class="text-[10px] text-slate-500 font-bold italic tracking-wide">--</p>
                         </div>
                     </div>
                 </div>
@@ -165,19 +165,19 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">電流計算依據</p>
-                            <p class="text-xs md:text-sm text-slate-700 font-bold">第 158 條、第 15 條</p>
-                            <p class="text-[10px] text-blue-400 font-medium mt-1">負載電流 × 1.25 安全係數</p>
+                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">電流計算依據</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">第 158 條、第 15 條</p>
+                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">負載 × 1.25 安全係數</p>
                         </div>
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">斷路器配對 (NFB)</p>
-                            <p class="text-xs md:text-sm text-slate-700 font-bold">第 151 條 (次高額定原則)</p>
-                            <p class="text-[10px] text-blue-400 font-medium mt-1">800A 以下得採緊鄰高階規格</p>
+                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">斷路器配對 (NFB)</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">第 151 條 <span class="bg-blue-100 text-blue-700 font-bold px-1 rounded ml-1 text-[10px]">次高原則</span></p>
+                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">800A 以下緊鄰高階</p>
                         </div>
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5">線材安培容量</p>
-                            <p class="text-xs md:text-sm text-slate-700 font-bold">第 16 條、表 16-3</p>
-                            <p class="text-[10px] text-blue-400 font-medium mt-1">絕緣導線於導線管內之容量</p>
+                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">線材安培容量</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">第 16 條、表 16-3</p>
+                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">導線管內安全流量</p>
                         </div>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-sm text-left border-collapse">
-                            <thead class="bg-slate-50 text-slate-400 font-black text-[10px] md:text-sm uppercase">
+                            <thead class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
                                 <tr>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">規格類型</th>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">跳脫額定</th>
@@ -210,7 +210,7 @@
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-sm text-left border-collapse">
-                            <thead class="bg-slate-50 text-slate-400 font-black text-[10px] md:text-sm uppercase">
+                            <thead class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
                                 <tr>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">導線規格</th>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">安培容量</th>
