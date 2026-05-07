@@ -7,7 +7,8 @@
 const nfbMarketSpecs = [
     { at: 15, af: 50 }, { at: 20, af: 50 }, { at: 30, af: 50 }, { at: 40, af: 50 }, { at: 50, af: 50 },
     { at: 60, af: 100 }, { at: 75, af: 100 }, { at: 100, af: 100 }, { at: 125, af: 225 }, { at: 150, af: 225 },
-    { at: 175, af: 225 }, { at: 200, af: 225 }, { at: 225, af: 225 }, { at: 250, af: 400 }, { at: 300, af: 400 }, { at: 400, af: 400 }
+    { at: 175, af: 225 }, { at: 200, af: 225 }, { at: 225, af: 225 }, { at: 250, af: 400 }, { at: 300, af: 400 }, { at: 400, af: 400 },
+    { at: 500, af: 800 }, { at: 600, af: 800 }, { at: 630, af: 800 }, { at: 800, af: 800 }
 ];
 
 const wireSpecs = [
@@ -28,7 +29,10 @@ const wireSpecs = [
     { name: "125mm² (絞線)", amp: 190, ref: "第 16 條 表 16-3" },
     { name: "150mm² (絞線)", amp: 220, ref: "第 16 條 表 16-3" },
     { name: "200mm² (絞線)", amp: 260, ref: "第 16 條 表 16-3" },
-    { name: "250mm² (絞線)", amp: 300, ref: "第 16 條 表 16-3" }
+    { name: "250mm² (絞線)", amp: 300, ref: "第 16 條 表 16-3" },
+    { name: "325mm² (絞線)", amp: 345, ref: "第 16 條 表 16-3" },
+    { name: "400mm² (絞線)", amp: 390, ref: "第 16 條 表 16-3" },
+    { name: "500mm² (絞線)", amp: 450, ref: "第 16 條 表 16-3" }
 ];
 
 const sopData = {
@@ -186,6 +190,13 @@ window.calculate = function () {
     if (result.recWire) {
         const parts = result.recWire.name.split(' ');
         document.getElementById('res-wire').innerHTML = parts.length > 1 ? `${parts[0]}<span class="text-xl md:text-3xl opacity-50 ml-2 font-bold">${parts[1]}</span>` : result.recWire.name;
+        document.getElementById('res-wire').classList.remove('text-orange-400');
+        document.getElementById('res-wire').classList.add('text-green-400');
+    } else {
+        // 超出表列範圍（設計電流 > 450A），顯示警告
+        document.getElementById('res-wire').innerHTML = `<span class="text-2xl md:text-3xl">多線並聯</span>`;
+        document.getElementById('res-wire').classList.remove('text-green-400');
+        document.getElementById('res-wire').classList.add('text-orange-400');
     }
     document.getElementById('res-pole-info').innerText = `${result.poleCount} 配置 (L1/L2${currentPhase === 3 ? '/L3' : ''})`;
 
@@ -252,7 +263,7 @@ function renderSteps(res) {
         </div>
         <div class="p-6 bg-white rounded-2xl border border-slate-300 shadow-sm transition-hover">
             <p class="font-bold text-slate-600 text-[10px] md:text-xs mb-2 uppercase tracking-wider">4. 導線校核</p>
-            <p class="mt-1 text-green-700 font-bold text-lg md:text-xl">${res.recWire ? res.recWire.name : '規格超出'}</p>
+            <p class="mt-1 font-bold text-lg md:text-xl ${res.recWire ? 'text-green-700' : 'text-orange-600'}">${res.recWire ? res.recWire.name : '超出表列範圍，請採用多線並聯或匯流排設計 (> 450A)'}</p>
         </div>
     `;
 }
