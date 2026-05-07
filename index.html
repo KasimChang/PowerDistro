@@ -121,27 +121,36 @@
                     <h2 class="text-xs font-bold opacity-40 uppercase mb-8 tracking-[0.2em]">法規校核建議結果</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
                         <div class="space-y-2">
-                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">保護裝置 (NFB)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">保護裝置
+                                (NFB)</p>
                             <div class="flex items-baseline space-x-2">
-                                <span id="res-nfb" class="text-3xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
+                                <span id="res-nfb"
+                                    class="text-3xl md:text-5xl font-black text-blue-400 tracking-tighter">--</span>
                                 <span class="text-base font-bold text-blue-400/50">AT</span>
                             </div>
-                            <div id="res-breaker-badge" class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold">NFB</div>
+                            <div id="res-breaker-badge"
+                                class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-400 text-[10px] font-bold">
+                                NFB</div>
                         </div>
                         <div id="elcb-module" class="space-y-2 opacity-20 transition-all duration-500">
-                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">漏電跳脫</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">漏電跳脫
+                            </p>
                             <div class="flex items-baseline space-x-1">
-                                <span id="res-elcb-ma" class="text-3xl md:text-5xl font-black text-yellow-500 tracking-tighter">--</span>
+                                <span id="res-elcb-ma"
+                                    class="text-3xl md:text-5xl font-black text-yellow-500 tracking-tighter">--</span>
                                 <span class="text-[10px] font-bold text-yellow-500/50">mA</span>
                             </div>
                             <p id="res-elcb-desc" class="text-[10px] text-slate-400 font-bold">非強制裝設</p>
                         </div>
                         <div class="space-y-2">
-                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">建議配線 (Wire)</p>
+                            <p class="text-[10px] md:text-xs text-slate-400 uppercase font-black tracking-wider">建議配線
+                                (Wire)</p>
                             <div class="flex items-baseline space-x-2">
-                                <span id="res-wire" class="text-3xl md:text-4xl lg:text-5xl font-black text-green-400 tracking-tighter whitespace-nowrap">--</span>
+                                <span id="res-wire"
+                                    class="text-3xl md:text-4xl lg:text-5xl font-black text-green-400 tracking-tighter whitespace-nowrap">--</span>
                             </div>
-                            <p id="res-pole-info" class="text-[10px] text-slate-500 font-bold italic tracking-wide">--</p>
+                            <p id="res-pole-info" class="text-[10px] text-slate-500 font-bold italic tracking-wide">--
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -151,33 +160,53 @@
                     <h2 class="text-sm font-black mb-6 text-slate-800 uppercase tracking-[0.15em] flex items-center">
                         <span class="w-8 h-1 bg-blue-500 rounded-full mr-3"></span> 計算過程明細
                     </h2>
-                    <div id="calc-steps" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs bg-slate-50 p-8 rounded-[32px] text-slate-600 leading-relaxed font-medium"></div>
+                    <div id="calc-steps"
+                        class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs bg-slate-50 p-8 rounded-[32px] text-slate-600 leading-relaxed font-medium">
+                    </div>
                 </div>
-                
+
                 <!-- 法規引用資訊框 -->
                 <div class="ios-card bg-blue-600/[0.03] border border-blue-500/20 p-8">
                     <div class="flex flex-wrap items-center gap-3 mb-6">
                         <div class="p-2 bg-blue-500 rounded-lg">
                             <i class="fas fa-book text-white text-xs"></i>
                         </div>
-                        <span class="font-black text-blue-600 text-sm md:text-base tracking-[0.1em] uppercase">法規引用與技術指標</span>
-                        <span class="bg-blue-100 text-blue-500 text-[10px] px-2 py-0.5 rounded-md font-bold italic">依據《用戶用電設備裝置規則》</span>
+                        <span
+                            class="font-black text-blue-600 text-sm md:text-base tracking-[0.1em] uppercase">法規引用與技術指標</span>
+                        <span
+                            class="bg-blue-100 text-blue-500 text-[10px] px-2 py-0.5 rounded-md font-bold italic">依據《用戶用電設備裝置規則》</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">電流計算依據</p>
-                            <p class="text-xs md:text-sm text-slate-900 font-black">第 158 條、第 15 條</p>
-                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">負載 × 1.25 安全係數</p>
+                            <p
+                                class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">
+                                電流計算依據</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">§38-I、§39-I、§179-I(2)、§214</p>
+                            <p
+                                class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">
+                                負載 × 1.25 安全係數</p>
                         </div>
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">斷路器配對 (NFB)</p>
-                            <p class="text-xs md:text-sm text-slate-900 font-black">第 151 條 <span class="bg-blue-100 text-blue-700 font-bold px-1 rounded ml-1 text-[10px]">次高原則</span></p>
-                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">800A 以下緊鄰高階</p>
+                            <p
+                                class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">
+                                斷路器配對 (NFB)</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">§79(基本原則)、§180(加熱設備)、§220(馬達與啟動電流)
+                                <span
+                                    class="bg-blue-100 text-blue-700 font-bold px-1 rounded ml-1 text-[10px]">次高原則</span>
+                            </p>
+                            <p
+                                class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">
+                                800A 以下緊鄰高階</p>
                         </div>
                         <div class="border-l-2 border-blue-200 pl-5">
-                            <p class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">線材安培容量</p>
-                            <p class="text-xs md:text-sm text-slate-900 font-black">第 16 條、表 16-3</p>
-                            <p class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">導線管內安全流量</p>
+                            <p
+                                class="text-[10px] md:text-xs font-black text-slate-600 uppercase tracking-widest mb-1.5">
+                                線材安培容量</p>
+                            <p class="text-xs md:text-sm text-slate-900 font-black">§19、§25、表 25 (金屬導線管/PVC管線配線之導線安培容量)
+                            </p>
+                            <p
+                                class="text-[10px] bg-blue-700 text-white px-2 py-0.5 rounded-sm font-black inline-block mt-2">
+                                導線管內安全流量</p>
                         </div>
                     </div>
                 </div>
@@ -186,11 +215,14 @@
                 <div class="ios-card overflow-hidden">
                     <div class="p-6 bg-slate-700 text-white flex justify-between items-center">
                         <span class="font-bold tracking-tight md:text-lg">斷路器規格校核表</span>
-                        <span id="res-breaker-title-pole" class="text-[10px] md:text-xs bg-slate-600 px-3 py-1 rounded-full text-slate-300">-- 配置</span>
+                        <span id="res-breaker-title-pole"
+                            class="text-[10px] md:text-xs bg-slate-600 px-3 py-1 rounded-full text-slate-300">--
+                            配置</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-sm text-left border-collapse">
-                            <thead class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
+                            <thead
+                                class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
                                 <tr>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">規格類型</th>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">跳脫額定</th>
@@ -206,11 +238,13 @@
                 <div class="ios-card overflow-hidden">
                     <div class="p-6 bg-slate-800 text-white flex justify-between items-center">
                         <span class="font-bold tracking-tight md:text-lg">導線安培容量校核表</span>
-                        <span class="text-[10px] md:text-xs bg-slate-700 px-3 py-1 rounded-full text-slate-300">PVC 導線管</span>
+                        <span class="text-[10px] md:text-xs bg-slate-700 px-3 py-1 rounded-full text-slate-300">PVC
+                            導線管</span>
                     </div>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-sm text-left border-collapse">
-                            <thead class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
+                            <thead
+                                class="bg-slate-50 text-slate-600 font-black text-[10px] md:text-sm uppercase shadow-sm">
                                 <tr>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">導線規格</th>
                                     <th class="px-4 md:px-8 py-4 md:py-6 border-b">安培容量</th>
